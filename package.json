@@ -1,0 +1,19 @@
+{
+  "name": "mementos",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "dev:f": "npm run dev --workspace=frontend",
+    "dev:b": "npm run dev --workspace=backend"
+  },
+  "keywords": [],
+  "author": "Ivan Alekseev",
+  "license": "ISC",
+  "type": "module"
+}
