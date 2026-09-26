@@ -3,7 +3,9 @@ import Memory from '../db/models/Memory.js';
 export const getAllMemories = async (req, res) => {
   const { query } = req.query;
 
-  const myMemories = Memory.find();
+  const myMemories = Memory.find().sort({
+    createdAt: -1,
+  });
 
   if (query !== undefined) {
     myMemories.where({
