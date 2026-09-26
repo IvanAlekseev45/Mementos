@@ -91,3 +91,11 @@ textarea {
   background: #fff;
   outline: none;
 }
+
+.error-message {
+  color: red;
+  font-style: italic;
+  position: absolute;
+  top: 55px;
+  font-size: 12px;
+}
