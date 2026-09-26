@@ -17,3 +17,7 @@ export const getAllMemories = async (query: string) => {
 export const createMemory = async (body: CreatePhoto) => {
   await api.post("", body);
 };
+
+export const deleteCardById = async (id: Memory["_id"]) => {
+  await api.delete(`/${id}`);
+};

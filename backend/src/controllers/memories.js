@@ -28,3 +28,10 @@ export const createMemory = async (req, res) => {
   await Memory.create(body);
   res.status(201).send();
 };
+
+export const deleteMemoryById = async (req, res) => {
+  const { id } = req.params;
+
+  await Memory.findOneAndDelete({ _id: id });
+  res.status(204).send();
+};
