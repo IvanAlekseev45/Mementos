@@ -26,6 +26,8 @@ const memorySchema = new Schema(
 
   {
     collection: 'mementos_collection',
+    versionKey: false,
+    timestamps: true,
   },
 );
 
