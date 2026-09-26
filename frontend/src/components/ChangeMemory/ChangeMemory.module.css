@@ -1,0 +1,55 @@
+.change-memory {
+  display: flex;
+  padding: 20px;
+  background: rgb(247, 243, 235);
+  border-radius: 10px;
+}
+.photo {
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 100px 25px rgba(55, 30, 10, 0.5),
+    inset 0 0 35px 8px rgba(140, 90, 35, 0.25);
+  width: 800px;
+  height: 450px;
+  object-fit: cover;
+}
+.title {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 700;
+}
+.description {
+  font-style: italic;
+}
+
+.location {
+  font-weight: 600;
+}
+
+.desc-div {
+  display: flex;
+  overflow-wrap: break-word;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 600px;
+}
+
+.photo-wrapper {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.photo-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  box-shadow:
+    inset 0 0 100px 25px rgba(55, 30, 10, 0.5),
+    inset 0 0 35px 8px rgba(140, 90, 35, 0.25);
+}
+
+.desc-div {
+  padding: 10px;
+}

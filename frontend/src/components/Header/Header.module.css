@@ -1,0 +1,106 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-inline: 20px;
+  padding-top: 50px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e8e1d6;
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.logo-title {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: #1e1c1a;
+}
+.logo-description {
+  display: none;
+}
+@media screen and (min-width: 1280px) {
+  .logo-description {
+    display: inline;
+    font-size: 13px;
+    font-style: italic;
+  }
+}
+.add-memory-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6f3ed;
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  transition: linear 200ms;
+}
+.add-memory-mobile:hover {
+  background: #4a5d4e90;
+  color: white;
+}
+
+@media screen and (min-width: 1280px) {
+  .add-memory-mobile {
+    display: none;
+  }
+}
+
+.buttons-list {
+  display: none;
+}
+
+.button-item {
+  display: none;
+}
+
+@media screen and (min-width: 1280px) {
+  .buttons-list {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .button-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    height: 38px;
+    padding-inline: 16px;
+
+    border: 1px solid #d6caba;
+    border-radius: 9999px;
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.43;
+    color: #5a4e43;
+    transition: linear 200ms;
+    white-space: nowrap;
+  }
+
+  .buttons-list li:last-child .button-item {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    background: #4a5d4ec6;
+    color: white;
+    transition: linear 200ms;
+  }
+
+  .buttons-list li:last-child .button-item:hover {
+    background: #4a5d4e90;
+  }
+
+  .button-item:hover {
+    border: 1px solid #4a5d4e;
+  }
+}

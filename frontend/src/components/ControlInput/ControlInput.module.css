@@ -1,0 +1,14 @@
+.control-input {
+  border: 1px solid #e6dece;
+  border-radius: 9999px;
+  padding: 12px 24px;
+  width: 438px;
+  height: 40px;
+  background: rgba(243, 237, 226, 0.7);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: row;
+  gap: 0;
+  outline: none;
+}

@@ -10,10 +10,14 @@
   "main": "index.js",
   "scripts": {
     "dev:f": "npm run dev --workspace=frontend",
-    "dev:b": "npm run dev --workspace=backend"
+    "dev:b": "npm run dev --workspace=backend",
+    "dev": "concurrently -n FRONTEND,BACKEND \"npm run dev:f\" \"npm run dev:b\""
   },
   "keywords": [],
   "author": "Ivan Alekseev",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
 }
