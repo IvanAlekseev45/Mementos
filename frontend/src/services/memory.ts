@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Memory, CreatePhoto } from "../types/memories";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "https://mementos-vbpq.onrender.com",
 });
 
 export const getAllMemories = async (query: string) => {
