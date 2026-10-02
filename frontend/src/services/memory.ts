@@ -7,11 +7,13 @@ import type {
   SeasonCategory,
 } from "../types/memories";
 
-const api = axios.create({
-  baseURL: "http://localhost:3001",
-});
-
 const global_url = "https://mementos-vbpq.onrender.com";
+
+const devUrl = "http://localhost:3001";
+
+const api = axios.create({
+  baseURL: global_url,
+});
 
 export const getAllMemories = async (
   query: string,
