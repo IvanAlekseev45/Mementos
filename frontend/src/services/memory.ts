@@ -9,7 +9,7 @@ import type {
 
 const global_url = "https://mementos-vbpq.onrender.com";
 
-const devUrl = "http://localhost:3001";
+// const devUrl = "http://localhost:3001";
 
 const api = axios.create({
   baseURL: global_url,
