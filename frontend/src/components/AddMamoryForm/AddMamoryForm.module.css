@@ -99,3 +99,11 @@ textarea {
   top: 55px;
   font-size: 12px;
 }
+
+.error-message-url {
+  color: red;
+  font-style: italic;
+  position: absolute;
+  bottom: 283px;
+  font-size: 12px;
+}

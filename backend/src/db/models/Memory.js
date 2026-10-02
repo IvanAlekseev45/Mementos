@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { addStatus, setUpdateRules } from '../hooks.js';
 
 const memorySchema = new Schema(
   {
@@ -19,7 +20,12 @@ const memorySchema = new Schema(
       required: true,
     },
     date: {
-      type: String,
+      type: Date,
+      required: true,
+    },
+    season: {
+      type: Schema.Types.ObjectId,
+      ref: 'Season',
       required: true,
     },
   },
@@ -30,6 +36,12 @@ const memorySchema = new Schema(
     timestamps: true,
   },
 );
+
+memorySchema.post('save', addStatus);
+
+memorySchema.pre('findOneAndUpdate', setUpdateRules);
+
+memorySchema.post('findOneAndUpdate', addStatus);
 
 const Memory = model('Memory', memorySchema);
 export default Memory;

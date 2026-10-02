@@ -2,19 +2,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Memory } from "../../types/memories";
 import css from "./ManageCardModal.module.css";
 import { deleteCardById } from "../../services/memory";
+import { Link } from "react-router-dom";
+import { useEffectsForModal } from "../../hooks/modalEffects";
 
 interface ManageCardModalProps {
   onCloseModal: () => void;
-  changeHandler: () => void;
   cardItem: Memory | null;
 }
 
-const ManageCardModal = ({
-  onCloseModal,
-  changeHandler,
+const ManageCardModal = ({ onCloseModal, cardItem }: ManageCardModalProps) => {
+  useEffectsForModal(onCloseModal);
 
-  cardItem,
-}: ManageCardModalProps) => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationKey: ["deleteById"],
@@ -35,9 +33,9 @@ const ManageCardModal = ({
   return (
     <div className={css["modal-info"]}>
       <p className={css["modal-title"]}>Manage this memory</p>
-      <button className={css["change-button"]} onClick={changeHandler}>
+      <Link to={`/memories/${cardItem?._id}`} className={css["change-button"]} target="_blank">
         In more detail..
-      </button>
+      </Link>
       <button className={css["delete-button"]} onClick={deleteHandler}>
         Delete memory..
       </button>

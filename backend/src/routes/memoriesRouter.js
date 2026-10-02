@@ -3,14 +3,39 @@ import {
   createMemory,
   deleteMemoryById,
   getAllMemories,
+  getMemoryById,
+  updateMemory,
 } from '../controllers/memories.js';
+import { celebrate } from 'celebrate';
+import {
+  createMemorySchema,
+  getMemoriesQueryParamsSchema,
+  memoryIdSchema,
+  updateMemorySchema,
+} from '../validations/memoriesValidation.js';
 
 const routerMemories = Router();
 
-routerMemories.get('/', getAllMemories);
+routerMemories.get(
+  '/',
+  celebrate(getMemoriesQueryParamsSchema),
+  getAllMemories,
+);
 
-routerMemories.post('/', createMemory);
+routerMemories.get(`/:id`, celebrate(memoryIdSchema), getMemoryById);
 
-routerMemories.delete(`/:id`, deleteMemoryById);
+routerMemories.post(
+  '/',
+  celebrate(createMemorySchema, { abortEarly: false }),
+  createMemory,
+);
+
+routerMemories.patch(
+  `/:id`,
+  celebrate(updateMemorySchema, { abortEarly: false }),
+  updateMemory,
+);
+
+routerMemories.delete(`/:id`, celebrate(memoryIdSchema), deleteMemoryById);
 
 export default routerMemories;

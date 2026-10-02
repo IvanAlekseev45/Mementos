@@ -1,3 +1,10 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
 .change-memory {
   display: flex;
   justify-content: space-between;
@@ -31,7 +38,9 @@
   overflow-wrap: break-word;
   flex-direction: column;
   gap: 10px;
-  max-width: 600px;
+  width: 600px;
+  position: relative;
+  padding: 20px;
 }
 
 .photo-wrapper {
@@ -52,6 +61,19 @@
     inset 0 0 35px 8px rgba(140, 90, 35, 0.25);
 }
 
-.desc-div {
-  padding: 10px;
+.desc-div p {
+  outline: none;
+}
+
+.change-memory-btn {
+  align-items: flex-end;
+  border-radius: 12px;
+  border: 1px solid;
+  position: absolute;
+  padding: 5px;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  border: 1px solid #e6dece;
+  font-style: italic;
 }

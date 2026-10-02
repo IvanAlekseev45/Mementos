@@ -15,6 +15,7 @@
   background: rgba(255, 255, 255, 0);
   transform: rotate(1deg);
   transition: linear 300ms;
+  cursor: default;
 }
 
 .card-item:nth-child(even) {
@@ -73,13 +74,6 @@
   background-color: #ddd0adb7;
 }
 
-.card-btn {
-  border: none;
-  background-color: transparent;
-  position: absolute;
-  bottom: 7px;
-  right: 7px;
-}
 .modal-btns button {
   font-weight: 400;
   font-size: 16px;

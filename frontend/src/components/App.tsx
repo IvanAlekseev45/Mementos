@@ -3,20 +3,36 @@ import css from "./App.module.css";
 import CardList from "./CardList/CardList";
 import Header from "./Header/Header";
 import { createMemory, getAllMemories } from "../services/memory";
-import type { Memory, CreatePhoto } from "../types/memories";
+import type { Memory, CreatePhoto, ApiValidationError, SeasonCategory } from "../types/memories";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import ChangeMemory from "./ChangeMemory/ChangeMemory";
 import { createPortal } from "react-dom";
 import Modal from "./Modal/Modal";
 import ManageCardModal from "./ManageCardModal/ManageCardModal";
+import { Routes, Route } from "react-router-dom";
+import type { AxiosError } from "axios";
+import FilterSection from "./FilterSection/FilterSection";
+import Paginate from "./Paginate/Paginate";
 
 const App = () => {
   const [query, setQuery] = useState("");
   const [value] = useDebounce(query, 300);
-  const [isShowChange, setIsShowChange] = useState(false);
   const [showModal, setShowModal] = useState<Memory | null>(null);
   const [cardItem, setCardItem] = useState<Memory | null>(null);
+  const [summer, setSummer] = useState<SeasonCategory>("");
+  const [currentPage, setcurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  const onSortSubmit = (q: "asc" | "desc") => {
+    setcurrentPage(1);
+    setSortOrder(q);
+  };
+
+  const infoSeason = (q: SeasonCategory) => {
+    setcurrentPage(1);
+    setSummer(q);
+  };
 
   const onOpenModal = (id: Memory["_id"]) => {
     const card = cards.find((el) => el._id === id);
@@ -28,25 +44,22 @@ const App = () => {
     setShowModal(null);
   };
 
-  const changeHandler = () => {
-    setShowModal(null);
-    setIsShowChange(true);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   const onSearchQuery = (value: string) => {
     setQuery(value);
   };
 
   const { data } = useQuery({
-    queryKey: ["memories", value],
-    queryFn: () => getAllMemories(value),
+    queryKey: ["memories", value, summer, currentPage, sortOrder],
+    queryFn: () => getAllMemories(value, summer, currentPage, sortOrder),
     placeholderData: keepPreviousData,
   });
-  const cards = data ?? [];
+  const cards = data?.memories ?? [];
+
+  const totalItems = data?.totalItems;
+
+  const seasonCount = data?.seasonCounts ?? [];
+
+  const page = data?.page ?? 1;
 
   const queryClient = useQueryClient();
 
@@ -58,7 +71,19 @@ const App = () => {
         queryKey: ["memories"],
       });
     },
+    onError: (err: AxiosError<ApiValidationError>) => {
+      const myError = err.response?.data.validation.body.message;
+      console.log(myError);
+    },
   });
+
+  const inc = () => {
+    setcurrentPage(page + 1);
+  };
+
+  const dec = () => {
+    setcurrentPage(page - 1);
+  };
 
   const onSubmit = (q: CreatePhoto) => {
     mutate(q);
@@ -66,20 +91,36 @@ const App = () => {
 
   return (
     <div className={css["container"]}>
-      <Header onSubmitInfo={onSubmit} onSubmit={onSearchQuery} />
-      {isShowChange && <ChangeMemory cardInfo={cardItem} />}
-      <CardList cards={cards} onOpenModal={onOpenModal} />
-      {showModal &&
-        createPortal(
-          <Modal>
-            <ManageCardModal
-              onCloseModal={onCloseModal}
-              changeHandler={changeHandler}
-              cardItem={cardItem}
-            />
-          </Modal>,
-          document.body,
-        )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Header onSubmitInfo={onSubmit} onSubmit={onSearchQuery} />
+              <FilterSection
+                totalItems={totalItems}
+                infoSeason={infoSeason}
+                seasonCount={seasonCount}
+                onSortSubmit={onSortSubmit}
+                sortOrder={sortOrder}
+              />
+              <Paginate page={page} inc={inc} dec={dec} />
+
+              <CardList cards={cards} onOpenModal={onOpenModal} />
+
+              {showModal &&
+                createPortal(
+                  <Modal>
+                    <ManageCardModal onCloseModal={onCloseModal} cardItem={cardItem} />
+                  </Modal>,
+                  document.body,
+                )}
+            </>
+          }
+        />
+
+        <Route path="/memories/:id" element={<ChangeMemory />} />
+      </Routes>
     </div>
   );
 };

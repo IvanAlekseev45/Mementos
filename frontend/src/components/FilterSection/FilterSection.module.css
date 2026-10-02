@@ -1,0 +1,42 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 9999999;
+  border-radius: 12px;
+  padding: 16px;
+  width: 1184px;
+  height: 100px;
+
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: #fbf2e8;
+}
+
+.filter-seasons {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.filter-seasons button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 8px;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  width: 150px;
+  height: 35px;
+  transition: linear 200ms;
+  background: #f4e4cf;
+}
+
+.filter-seasons button:hover {
+  background: #4a6353b8;
+  color: white;
+}
