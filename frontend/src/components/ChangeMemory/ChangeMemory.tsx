@@ -5,23 +5,16 @@ import { getMemoryById } from "../../services/memory";
 import type { Memory } from "../../types/memories";
 import { useState } from "react";
 import EditMemoryCard from "../EditMemoryCard/EditMemoryCard";
-import type { AxiosError } from "axios";
 
 const ChangeMemory = () => {
   const { id = "" } = useParams();
   const [isShowModal, setIsShowModal] = useState(false);
 
-  const { data, isError, isLoading, error } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ["cardById", { id }],
     queryFn: () => getMemoryById(id as Memory["_id"]),
     retry: 2,
   });
-
-  const err = error as AxiosError;
-
-  console.log("message:", err?.message);
-
-  console.log("status:", err?.response?.status);
 
   const onCloseModal = () => {
     setIsShowModal(false);
