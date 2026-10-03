@@ -3,7 +3,7 @@ import css from "./App.module.css";
 import CardList from "./CardList/CardList";
 import Header from "./Header/Header";
 import { createMemory, getAllMemories } from "../services/memory";
-import type { Memory, CreatePhoto, ApiValidationError, SeasonCategory } from "../types/memories";
+import type { Memory, CreatePhoto, ApiValidationError, SeasonCategory, DateSort } from "../types/memories";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import ChangeMemory from "./ChangeMemory/ChangeMemory";
@@ -22,11 +22,11 @@ const App = () => {
   const [cardItem, setCardItem] = useState<Memory | null>(null);
   const [summer, setSummer] = useState<SeasonCategory>("");
   const [currentPage, setcurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [dateSort, setDateSort] = useState<DateSort>("");
 
-  const onSortSubmit = (q: "asc" | "desc") => {
+  const onSortSubmit = (q: DateSort) => {
     setcurrentPage(1);
-    setSortOrder(q);
+    setDateSort(q);
   };
 
   const infoSeason = (q: SeasonCategory) => {
@@ -49,8 +49,8 @@ const App = () => {
   };
 
   const { data } = useQuery({
-    queryKey: ["memories", value, summer, currentPage, sortOrder],
-    queryFn: () => getAllMemories(value, summer, currentPage, sortOrder),
+    queryKey: ["memories", value, summer, currentPage, dateSort],
+    queryFn: () => getAllMemories(value, summer, currentPage, dateSort),
     placeholderData: keepPreviousData,
   });
   const cards = data?.memories ?? [];
@@ -60,6 +60,8 @@ const App = () => {
   const seasonCount = data?.seasonCounts ?? [];
 
   const page = data?.page ?? 1;
+
+  const totalPages = data?.totalPages ?? 1;
 
   const queryClient = useQueryClient();
 
@@ -102,9 +104,9 @@ const App = () => {
                 infoSeason={infoSeason}
                 seasonCount={seasonCount}
                 onSortSubmit={onSortSubmit}
-                sortOrder={sortOrder}
+                dateSort={dateSort}
               />
-              <Paginate page={page} inc={inc} dec={dec} />
+              <Paginate page={page} inc={inc} dec={dec} totalPages={totalPages} />
 
               <CardList cards={cards} onOpenModal={onOpenModal} />
 

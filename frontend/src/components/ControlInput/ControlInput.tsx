@@ -9,9 +9,11 @@ const ControlInput = ({ onSubmit }: ControlInputProps) => {
   const [query, setQuery] = useState("");
 
   const changeInputSubmit = (e: ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    const value = e.target.value;
+
+    setQuery(value);
+    onSubmit(value);
   };
-  onSubmit(query);
 
   return (
     <input

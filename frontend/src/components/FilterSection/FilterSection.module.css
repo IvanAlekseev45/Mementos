@@ -2,13 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 9999999;
+
   border-radius: 12px;
-  padding: 16px;
-  width: 1184px;
-  height: 100px;
+  padding: 14px;
+  width: auto;
+  height: auto;
 
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   background: #fbf2e8;
@@ -16,9 +14,18 @@
 
 .filter-seasons {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 16px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media screen and (min-width: 1280px) {
+  .filter-seasons {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
+  }
 }
 
 .filter-seasons button {
@@ -39,4 +46,23 @@
 .filter-seasons button:hover {
   background: #4a6353b8;
   color: white;
+}
+
+.sort-label {
+  font-style: italic;
+  width: 185px;
+  display: flex;
+  border: none;
+  background-color: #f4e4cf;
+  border-radius: 9999px;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.sort-label select {
+  border-radius: 9999px;
+  border: none;
+  padding: 5px;
+  outline: none;
+  padding-left: 10px;
 }

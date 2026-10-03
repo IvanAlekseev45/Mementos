@@ -1,11 +1,5 @@
 import axios from "axios";
-import type {
-  Memory,
-  CreatePhoto,
-  UpdateMemoryObj,
-  GetMemoryResponse,
-  SeasonCategory,
-} from "../types/memories";
+import type { Memory, CreatePhoto, UpdateMemoryObj, GetMemoryResponse, SeasonCategory, DateSort } from "../types/memories";
 
 const global_url = "https://mementos-vbpq.onrender.com";
 
@@ -15,21 +9,29 @@ const api = axios.create({
   baseURL: global_url,
 });
 
-export const getAllMemories = async (
-  query: string,
-  seasonsCategory?: SeasonCategory,
-  page?: number,
-  sortOrder?: "asc" | "desc",
-) => {
-  const params = {
+interface RequestParams {
+  query: string;
+  seasonsCategory?: SeasonCategory;
+  page?: number;
+  sortBy?: "date";
+  sortOrder?: "asc" | "desc";
+}
+
+export const getAllMemories = async (query: string, seasonsCategory?: SeasonCategory, page?: number, dateSort?: DateSort) => {
+  const params: RequestParams = {
     query,
     seasonsCategory,
     page,
-    sortBy: "date",
-    sortOrder,
   };
 
-  const { data } = await api.get<GetMemoryResponse>("/memories", { params });
+  if (dateSort) {
+    params.sortBy = "date";
+    params.sortOrder = dateSort;
+  }
+
+  const { data } = await api.get<GetMemoryResponse>("/memories", {
+    params,
+  });
 
   return data;
 };

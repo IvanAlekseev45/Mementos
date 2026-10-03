@@ -2,16 +2,21 @@ import css from "./Paginate.module.css";
 
 interface PaginateProps {
   page: number;
+  totalPages: number;
   inc: () => void;
   dec: () => void;
 }
 
-const Paginate = ({ page, inc, dec }: PaginateProps) => {
+const Paginate = ({ page, inc, dec, totalPages }: PaginateProps) => {
   return (
     <div className={css["paginate"]}>
-      <button onClick={dec}>Prev</button>
+      <button disabled={page === 1} onClick={dec}>
+        Prev
+      </button>
       <p>{page}</p>
-      <button onClick={inc}>Next</button>
+      <button disabled={page === totalPages} onClick={inc}>
+        Next
+      </button>
     </div>
   );
 };

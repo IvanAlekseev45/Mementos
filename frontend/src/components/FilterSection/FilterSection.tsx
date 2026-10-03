@@ -1,5 +1,5 @@
 import { type ChangeEvent } from "react";
-import type { Season, SeasonCategory, SeasonCount } from "../../types/memories";
+import type { DateSort, Season, SeasonCategory, SeasonCount } from "../../types/memories";
 import css from "./FilterSection.module.css";
 
 interface FilterSectionProps {
@@ -7,20 +7,14 @@ interface FilterSectionProps {
   totalItems?: number;
   infoSeason: (q: SeasonCategory) => void;
   seasonCount: SeasonCount[];
-  onSortSubmit: (q: "asc" | "desc") => void;
-  sortOrder: "asc" | "desc";
+  onSortSubmit: (q: DateSort) => void;
+  dateSort: DateSort;
 }
 
-const FilterSection = ({
-  totalItems,
-  infoSeason,
-  seasonCount,
-  onSortSubmit,
-  sortOrder,
-}: FilterSectionProps) => {
+const FilterSection = ({ totalItems, infoSeason, seasonCount, onSortSubmit, dateSort }: FilterSectionProps) => {
   const sortHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     const currentSortValue = e.target.value;
-    onSortSubmit(currentSortValue as "asc" | "desc");
+    onSortSubmit(currentSortValue as DateSort);
   };
   return (
     <div className={css["filter"]}>
@@ -63,11 +57,12 @@ const FilterSection = ({
           )
         </button>
       </div>
-      <label>
-        <span> Sort by date:</span>
-        <select name="sortOrder" onChange={sortHandler} value={sortOrder}>
-          <option value="desc">Newest first</option>
-          <option value="asc">Oldest first</option>
+      <label className={css["sort-label"]}>
+        <span> Sort:</span>
+        <select name="sortOrder" onChange={sortHandler} value={dateSort}>
+          <option value="">Recently added </option>
+          <option value="desc">Newer by date</option>
+          <option value="asc">Older by date</option>
         </select>
       </label>
     </div>

@@ -59,3 +59,5 @@ export interface ApiValidationError {
 }
 
 export type SeasonCategory = "spring" | "summer" | "autumn" | "winter" | "";
+
+export type DateSort = "" | "asc" | "desc";
