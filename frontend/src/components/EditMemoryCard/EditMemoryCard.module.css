@@ -1,43 +1,105 @@
 .edit-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 350px;
+  gap: 12px;
+
+  width: min(320px, calc(100vw - 48px));
+  padding: 16px;
+
+  border-radius: 12px;
+  background: #f7f3eb;
 }
 
-.change-memory-btn {
-  align-items: flex-end;
-  border-radius: 12px;
-  border: 1px solid;
+/* INPUTS */
 
-  padding: 5px;
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
 
-  background: white;
-  border: 1px solid #e6dece;
-  font-style: italic;
-}
+  border: 1px solid #eae4d8;
+  border-radius: 8px;
 
-.close-btn {
-  align-items: flex-end;
-  border-radius: 12px;
-  border: 1px solid;
+  padding: 10px 12px;
 
-  padding: 5px;
+  background: #fff;
 
-  background: white;
-  border: 1px solid #e6dece;
-  font-style: italic;
+  font: inherit;
+  color: #27211c;
+
+  outline: none;
 }
 
 .edit-form input {
-  border: 1px solid #eae4d8;
-  border-radius: 8px;
-  padding: 11px 12px 8px;
-  width: 100%;
   height: 42px;
-  background: #fff;
+}
+
+.edit-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  border-color: #8e8172;
+}
+
+/* BUTTONS */
+
+.change-memory-btn,
+.close-btn {
+  width: 100%;
+
+  padding: 9px 12px;
+
+  border: 1px solid #e6dece;
+  border-radius: 12px;
+
+  background: white;
+
+  font-style: italic;
+
+  cursor: pointer;
+
+  transition: background 200ms linear;
+}
+
+.change-memory-btn:hover,
+.close-btn:hover {
+  background: #f1ece3;
 }
 
 .change-memory-btn:disabled {
-  background-color: rgba(128, 128, 128, 0.247);
+  background: rgba(128, 128, 128, 0.15);
+  color: rgba(39, 33, 28, 0.45);
+
+  cursor: default;
+}
+
+/* ERROR */
+
+.error-message {
+  font-size: 13px;
+  font-style: italic;
+  text-align: center;
+
+  color: #8b4a42;
+}
+
+/* DESKTOP */
+
+@media screen and (min-width: 1280px) {
+  .edit-form {
+    width: 400px;
+    padding: 24px;
+    gap: 14px;
+  }
+
+  .edit-form textarea {
+    min-height: 120px;
+  }
+
+  .change-memory-btn,
+  .close-btn {
+    width: auto;
+  }
 }
