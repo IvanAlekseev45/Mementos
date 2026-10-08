@@ -52,6 +52,7 @@ const App = () => {
     queryKey: ["memories", value, summer, currentPage, dateSort],
     queryFn: () => getAllMemories(value, summer, currentPage, dateSort),
     placeholderData: keepPreviousData,
+    staleTime: Infinity,
   });
   const cards = data?.memories ?? [];
 
