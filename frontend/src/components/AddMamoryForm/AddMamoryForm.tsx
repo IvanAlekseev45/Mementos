@@ -13,15 +13,15 @@ interface InitialValuesTypes {
   title: string;
   date: string;
   location: string;
-  image: string;
+  image: null | File;
   description: string;
 }
 
-const initialValues = {
+const initialValues: InitialValuesTypes = {
   title: "",
   date: "",
   location: "",
-  image: "",
+  image: null,
   description: "",
 };
 
@@ -29,7 +29,7 @@ const validationSchema = Yup.object({
   title: Yup.string().required().trim(),
   date: Yup.string().required().trim(),
   location: Yup.string().required().trim(),
-  image: Yup.string().required("").trim("").url("invalid url format"),
+  image: Yup.mixed<File>().required("Choose a photo"),
   description: Yup.string().required().trim(),
 });
 
@@ -61,12 +61,16 @@ const AddMamoryForm = ({ onSubmit, closeModal }: AddMamoryFormProps) => {
                 <Field type="text" placeholder="title.." name="title" />
                 <Field type="date" placeholder="date.." name="date" />
                 <Field type="text" placeholder="location.." name="location" />
-                <Field type="text" placeholder="add photo's URL.." name="image" />
-                <ErrorMessage
-                  component={"span"}
-                  name="image"
-                  className={css["error-message-url"]}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    const file = event.currentTarget.files?.[0] ?? null;
+
+                    data.setFieldValue("image", file);
+                  }}
                 />
+                <ErrorMessage component={"span"} name="image" className={css["error-message-url"]} />
                 <Field as="textarea" placeholder="description.." name="description" />
                 <div className={css["form-btns"]}>
                   <button type="submit" className={css["new-memory-btn"]}>
@@ -76,9 +80,7 @@ const AddMamoryForm = ({ onSubmit, closeModal }: AddMamoryFormProps) => {
                     Later..
                   </button>
                   {myFormErrors.length > 0 && (
-                    <span className={css["error-message"]}>
-                      Don't leave empty spaces in your memory..
-                    </span>
+                    <span className={css["error-message"]}>Don't leave empty spaces in your memory..</span>
                   )}
                 </div>
               </Form>

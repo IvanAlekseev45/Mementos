@@ -6,6 +6,7 @@ const memorySchema = new Schema(
     image: {
       type: String,
       required: true,
+      default: null,
     },
     title: {
       type: String,

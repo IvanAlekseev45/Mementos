@@ -9,7 +9,7 @@ interface CardItemProps {
 const CardItem = ({ card, onOpenModal }: CardItemProps) => {
   return (
     <li className={css["card-item"]} onClick={() => onOpenModal(card._id)}>
-      <img className={css["img-item"]} src={card.image} alt={card.description} />
+      <img className={css["img-item"]} src={card.image} decoding="async" loading="lazy" alt={card.description} />
       <h2 className={css["title-item"]}>{card.title}</h2>
       <p className={css["date-item"]}>{card.date}</p>
       <p className={css["description-item"]}>{card.description}</p>

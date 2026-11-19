@@ -2,6 +2,7 @@ import Memory from '../db/models/Memory.js';
 import createHttpError from 'http-errors';
 import { addSeasonFromMonth } from '../utils/month.js';
 import Season from '../db/models/Seasons.js';
+import { saveBufferToCloudery } from '../utils/cloudinary.js';
 
 export const getAllMemories = async (req, res) => {
   const { page, perPage, sortBy, sortOrder, query, seasonsCategory } =
@@ -106,10 +107,23 @@ export const getMemoryById = async (req, res) => {
   res.json(memory);
 };
 export const createMemory = async (req, res) => {
+  const file = req.file;
+  if (!file) {
+    throw createHttpError(400, 'Photo is required');
+  }
+  const uploudFile = await saveBufferToCloudery({
+    buffer: file.buffer,
+    folder: 'mementos',
+  });
+
   const body = req.body;
+
   const date = req.body.date;
 
   await addSeasonFromMonth(body, date);
+
+  const imageUrl = uploudFile.secure_url;
+  body.image = imageUrl;
 
   const newCard = await Memory.create(body);
   await newCard.populate('season');
@@ -117,7 +131,6 @@ export const createMemory = async (req, res) => {
     newCard,
   });
 };
-
 export const updateMemory = async (req, res) => {
   const body = req.body;
   const { id } = req.params;

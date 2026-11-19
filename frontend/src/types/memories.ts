@@ -35,7 +35,7 @@ export interface CreatePhoto {
   description: string;
   location: string;
   date: string;
-  image: string;
+  image: File | null;
 }
 
 export interface UpdateMemoryObj {

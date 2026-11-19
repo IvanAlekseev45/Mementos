@@ -66,7 +66,7 @@ const App = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["memories"],
     mutationFn: createMemory,
     onSuccess: () => {
@@ -110,6 +110,7 @@ const App = () => {
               <Paginate page={page} inc={inc} dec={dec} totalPages={totalPages} />
 
               <CardList cards={cards} onOpenModal={onOpenModal} />
+              {isPending && <p className={css["loader"]}>LOADING...</p>}
 
               {showModal &&
                 createPortal(

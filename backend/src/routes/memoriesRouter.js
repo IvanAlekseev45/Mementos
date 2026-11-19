@@ -13,6 +13,7 @@ import {
   memoryIdSchema,
   updateMemorySchema,
 } from '../validations/memoriesValidation.js';
+import { upload } from '../middlewares/upload.js';
 
 const routerMemories = Router();
 
@@ -26,6 +27,7 @@ routerMemories.get(`/:id`, celebrate(memoryIdSchema), getMemoryById);
 
 routerMemories.post(
   '/',
+  upload.single('image'),
   celebrate(createMemorySchema, { abortEarly: false }),
   createMemory,
 );

@@ -1,12 +1,12 @@
 import axios from "axios";
 import type { Memory, CreatePhoto, UpdateMemoryObj, GetMemoryResponse, SeasonCategory, DateSort } from "../types/memories";
 
-const global_url = "https://mementos-vbpq.onrender.com";
+// const global_url = "https://mementos-vbpq.onrender.com";
 
-// const devUrl = "http://localhost:3001";
+const devUrl = "http://localhost:3001";
 
 const api = axios.create({
-  baseURL: global_url,
+  baseURL: devUrl,
 });
 
 interface RequestParams {
@@ -52,7 +52,17 @@ export const updateMemory = async (info: UpdateMemory) => {
 };
 
 export const createMemory = async (body: CreatePhoto) => {
-  await api.post("/memories", body);
+  const formData = new FormData();
+  formData.append("title", body.title);
+  formData.append("description", body.description);
+  formData.append("location", body.location);
+  formData.append("date", body.date);
+
+  if (body.image) {
+    formData.append("image", body.image);
+  }
+
+  await api.post("/memories", formData);
 };
 
 export const deleteCardById = async (id: Memory["_id"]) => {

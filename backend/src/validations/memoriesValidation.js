@@ -25,7 +25,6 @@ export const getMemoriesQueryParamsSchema = {
 
 export const createMemorySchema = {
   [Segments.BODY]: Joi.object({
-    image: Joi.string().required().trim().uri(),
     title: Joi.string().required().trim(),
     description: Joi.string().required().trim(),
     location: Joi.string().required().trim(),
