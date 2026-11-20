@@ -45,10 +45,13 @@ export interface UpdateMemoryObj {
   date?: string;
 }
 
-export interface ApiValidationError {
+export interface ApiError {
+  message: string;
+}
+
+export interface ApiValidationError extends ApiError {
   statusCode: number;
   error: string;
-  message: string;
   validation: {
     body: {
       source: string;

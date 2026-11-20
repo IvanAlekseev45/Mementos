@@ -1,11 +1,12 @@
-import { ErrorMessage, Field, Form, Formik, type FormikProps } from "formik";
+import { ErrorMessage, Field, Form, Formik, type FormikHelpers, type FormikProps } from "formik";
 import type { CreatePhoto } from "../../types/memories";
 import css from "./AddMamoryForm.module.css";
 import * as Yup from "yup";
 import { useEffectsForModal } from "../../hooks/modalEffects";
+import axios from "axios";
 
 interface AddMamoryFormProps {
-  onSubmit: (q: CreatePhoto) => void;
+  onSubmit: (q: CreatePhoto) => Promise<void>;
   closeModal: () => void;
 }
 
@@ -36,10 +37,21 @@ const validationSchema = Yup.object({
 const AddMamoryForm = ({ onSubmit, closeModal }: AddMamoryFormProps) => {
   useEffectsForModal(closeModal);
 
-  const onFormSubmit = (values: InitialValuesTypes) => {
-    onSubmit(values);
+  const onFormSubmit = async (values: InitialValuesTypes, helpers: FormikHelpers<InitialValuesTypes>) => {
+    try {
+      await onSubmit(values);
 
-    closeModal();
+      closeModal();
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 413) {
+          helpers.setFieldError("image", "This photo is too big..");
+        }
+        console.log(err);
+      }
+
+      console.log(err);
+    }
   };
   return (
     <div className={css["backdrop"]}>
@@ -55,6 +67,10 @@ const AddMamoryForm = ({ onSubmit, closeModal }: AddMamoryFormProps) => {
         >
           {(data: FormikProps<InitialValuesTypes>) => {
             const myFormErrors = Object.keys(data.errors);
+
+            console.log("\n========== DEBUG ==========");
+            console.log(data.errors);
+            console.log("===========================\n");
 
             return (
               <Form className={css["add-mamory-form"]}>
@@ -74,12 +90,12 @@ const AddMamoryForm = ({ onSubmit, closeModal }: AddMamoryFormProps) => {
                 <Field as="textarea" placeholder="description.." name="description" />
                 <div className={css["form-btns"]}>
                   <button type="submit" className={css["new-memory-btn"]}>
-                    New memory
+                    {data.isSubmitting ? "Creating memory..." : "New memory"}
                   </button>
                   <button type="button" className={css["later-btn"]} onClick={closeModal}>
                     Later..
                   </button>
-                  {myFormErrors.length > 0 && (
+                  {myFormErrors.length > 0 && !myFormErrors.includes("image") && (
                     <span className={css["error-message"]}>Don't leave empty spaces in your memory..</span>
                   )}
                 </div>

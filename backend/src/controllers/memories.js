@@ -10,10 +10,49 @@ export const getAllMemories = async (req, res) => {
 
   const skip = (page - 1) * perPage;
 
-  const season = await Season.findOne({ season: seasonsCategory });
-
+  // Створюємо базовий запит
   const memoryQuery = Memory.find();
 
+  // Знаходимо сезон лише тоді, коли він переданий
+  if (seasonsCategory) {
+    const season = await Season.findOne({
+      season: seasonsCategory,
+    });
+
+    if (!season) {
+      throw createHttpError(404, 'Season not found');
+    }
+
+    memoryQuery.where('season').equals(season._id);
+  }
+
+  // Додаємо пошук
+  if (query) {
+    memoryQuery.where({
+      $or: [
+        {
+          title: {
+            $regex: query,
+            $options: 'i',
+          },
+        },
+        {
+          description: {
+            $regex: query,
+            $options: 'i',
+          },
+        },
+        {
+          location: {
+            $regex: query,
+            $options: 'i',
+          },
+        },
+      ],
+    });
+  }
+
+  // Статистика кількості memories за сезонами
   const seasonCounts = await Memory.aggregate([
     {
       $group: {
@@ -41,37 +80,11 @@ export const getAllMemories = async (req, res) => {
     },
   ]);
 
-  if (seasonsCategory) {
-    memoryQuery.where('season').equals(season._id);
-  }
-
-  if (query) {
-    memoryQuery.where({
-      $or: [
-        {
-          title: {
-            $regex: query,
-            $options: 'i',
-          },
-        },
-        {
-          description: {
-            $regex: query,
-            $options: 'i',
-          },
-        },
-        {
-          location: {
-            $regex: query,
-            $options: 'i',
-          },
-        },
-      ],
-    });
-  }
-
+  // Незалежні запити до бази даних
   const [myMemories, filterItems, totalItems] = await Promise.all([
+    // Отримуємо тільки одну сторінку
     memoryQuery
+      .clone()
       .populate('season')
       .sort({
         [sortBy]: sortOrder,
@@ -79,12 +92,15 @@ export const getAllMemories = async (req, res) => {
       .limit(perPage)
       .skip(skip),
 
+    // Рахуємо всі записи після фільтрації
     memoryQuery.clone().countDocuments(),
 
-    Memory.find().clone().countDocuments(),
+    // Рахуємо всі записи в базі
+    Memory.countDocuments(),
   ]);
 
-  const totalPages = Math.ceil(totalItems / perPage);
+  // Кількість сторінок після фільтрації
+  const totalPages = Math.ceil(filterItems / perPage);
 
   res.json({
     page,
@@ -99,42 +115,50 @@ export const getAllMemories = async (req, res) => {
 
 export const getMemoryById = async (req, res) => {
   const { id } = req.params;
+
   const memory = await Memory.findOne({ _id: id });
 
-  if (!memory) throw createHttpError(404, `Cannot find memory with id ${id}`);
+  if (!memory) {
+    throw createHttpError(404, `Cannot find memory with id ${id}`);
+  }
 
   await memory.populate('season');
+
   res.json(memory);
 };
+
 export const createMemory = async (req, res) => {
   const file = req.file;
+
   if (!file) {
     throw createHttpError(400, 'Photo is required');
   }
-  const uploudFile = await saveBufferToCloudery({
+
+  const uploadedFile = await saveBufferToCloudery({
     buffer: file.buffer,
     folder: 'mementos',
   });
 
   const body = req.body;
-
-  const date = req.body.date;
+  const date = body.date;
 
   await addSeasonFromMonth(body, date);
 
-  const imageUrl = uploudFile.secure_url;
-  body.image = imageUrl;
+  body.image = uploadedFile.secure_url;
 
   const newCard = await Memory.create(body);
+
   await newCard.populate('season');
+
   res.status(201).json({
     newCard,
   });
 };
+
 export const updateMemory = async (req, res) => {
   const body = req.body;
   const { id } = req.params;
-  const date = req.body.date;
+  const date = body.date;
 
   if (date) {
     await addSeasonFromMonth(body, date);
@@ -152,9 +176,11 @@ export const updateMemory = async (req, res) => {
     updatedMemory,
   });
 };
+
 export const deleteMemoryById = async (req, res) => {
   const { id } = req.params;
 
   await Memory.findOneAndDelete({ _id: id });
+
   res.status(204).send();
 };

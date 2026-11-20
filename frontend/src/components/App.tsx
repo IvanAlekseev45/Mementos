@@ -66,7 +66,7 @@ const App = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ["memories"],
     mutationFn: createMemory,
     onSuccess: () => {
@@ -75,8 +75,11 @@ const App = () => {
       });
     },
     onError: (err: AxiosError<ApiValidationError>) => {
-      const myError = err.response?.data.validation.body.message;
-      console.log(myError);
+      const status = err.response?.status;
+      if (status === 413) {
+        console.log(err.response?.data.message);
+        return;
+      }
     },
   });
 
@@ -88,8 +91,8 @@ const App = () => {
     setcurrentPage(page - 1);
   };
 
-  const onSubmit = (q: CreatePhoto) => {
-    mutate(q);
+  const onSubmit = async (q: CreatePhoto) => {
+    await mutateAsync(q);
   };
 
   return (
@@ -107,7 +110,7 @@ const App = () => {
                 onSortSubmit={onSortSubmit}
                 dateSort={dateSort}
               />
-              <Paginate page={page} inc={inc} dec={dec} totalPages={totalPages} />
+              {totalPages > 1 && <Paginate page={page} inc={inc} dec={dec} totalPages={totalPages} />}
 
               <CardList cards={cards} onOpenModal={onOpenModal} />
               {isPending && <p className={css["loader"]}>LOADING...</p>}

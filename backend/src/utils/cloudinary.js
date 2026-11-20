@@ -37,24 +37,3 @@ export const saveBufferToCloudery = ({ buffer, folder }) => {
     uploadStream.end(buffer);
   });
 };
-
-function getUser(callback) {
-  setTimeout(() => {
-    callback(null, { name: 'Alex' });
-  }, 1000);
-}
-
-const getUserAsync = () => {
-  return new Promise((resolve, reject) => {
-    getUser((error, result) => {
-      if (error) {
-        reject(error);
-      }
-
-      resolve(result);
-    });
-  });
-};
-
-const user = await getUserAsync();
-console.log(user.name); // "Alex"
