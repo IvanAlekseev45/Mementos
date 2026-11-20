@@ -3,6 +3,7 @@ import { HttpError } from 'http-errors';
 import multer from 'multer';
 
 export const errorsHandler = (error, req, res, next) => {
+  console.error('SERVER ERROR:', error);
   if (error instanceof multer.MulterError) {
     const status = error.code === 'LIMIT_FILE_SIZE' ? 413 : 400;
 
