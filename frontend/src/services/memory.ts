@@ -1,12 +1,11 @@
 import axios from "axios";
 import type { Memory, CreatePhoto, UpdateMemoryObj, GetMemoryResponse, SeasonCategory, DateSort } from "../types/memories";
 
-// const global_url = "https://mementos-vbpq.onrender.com";
-
+const globalUrl = "https://mementos-vbpq.onrender.com";
 const devUrl = "http://localhost:3001";
 
 const api = axios.create({
-  baseURL: devUrl,
+  baseURL: import.meta.env.DEV ? devUrl : globalUrl,
 });
 
 interface RequestParams {
