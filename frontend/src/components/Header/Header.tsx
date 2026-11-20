@@ -6,7 +6,7 @@ import ControlInput from "../ControlInput/ControlInput";
 import type { CreatePhoto } from "../../types/memories";
 
 interface HeaderProps {
-  onSubmitInfo: (q: CreatePhoto) => void;
+  onSubmitInfo: (q: CreatePhoto) => Promise<void>;
   onSubmit: (q: string) => void;
 }
 
